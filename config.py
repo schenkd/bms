@@ -13,7 +13,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
     # properties
-    FLASKY_POSTS_PER_PAGE = 10
+    FLASKY_POSTS_PER_PAGE = 3
 
     @staticmethod
     def init_app(app):
