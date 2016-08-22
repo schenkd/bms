@@ -23,6 +23,7 @@ class Config:
 
     # properties
     FLASKY_POSTS_PER_PAGE = 3
+    FLASKY_ADMIN = 'davidschenk4@gmail.com'
 
     @staticmethod
     def init_app(app):
