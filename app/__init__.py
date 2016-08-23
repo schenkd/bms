@@ -1,11 +1,10 @@
-#!/usr/bin/python
-from config import config
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_moment import Moment
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_mail import Mail
+from config import config
 
 moment = Moment()
 db = SQLAlchemy()
