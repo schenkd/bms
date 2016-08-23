@@ -8,14 +8,21 @@ I'm using python/flask for my backend and bootstrap for my frontend layout. SQLA
 ## goals
 
 ### v1.0
-- :soon: create blog post
-- markdown editor with pic upload
-- search engine
--  :heavy_check_mark: usermanagement (user, editor, admin)
-- comments
-- categories
-- :soon: user profile (save posts, see comments, upload pic etc.)
-- automatically generating editor team page
+- [X] :heavy_check_mark: create blog post
+- [ ] markdown editor with pic upload
+- [ ] search engine
+- [X] :heavy_check_mark: usermanagement
+  * [X] Roles (user, mod, admin)
+  * [X] change pw or email
+  * [X] email token after registration
+- [ ] comments
+- [ ] categories
+- [ ] :soon: user profile 
+  * [ ] :soon: save favourite posts 
+  * [ ] :soon: see your own comments
+  * [ ] upload a profile pic
+  * [X] see some information about the user
+- [ ] automatically generating editor team page
 
 ### future version
 - automatically social media administration
