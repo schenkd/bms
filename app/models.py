@@ -3,6 +3,7 @@ from flask_login import UserMixin, AnonymousUserMixin
 from . import login_manager, db
 from flask import current_app
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from datetime import datetime
 
 
 class Permission:
@@ -26,6 +27,7 @@ class Role(db.Model):
     permissions = db.Column(db.Integer)
     users = db.relationship('User', backref='role', lazy='dynamic')
 
+    # Attention: if u rebuild the database don't forget to execute this method
     @staticmethod
     def insert_roles():
         roles = {
@@ -47,7 +49,7 @@ class Role(db.Model):
             db.session.add(role)
         db.session.commit()
 
-    # Optional: Gibt einen lesbaren String zurück für z.B. debugging oder testing
+    # Optional: return a readable string for debugging or testing
     def __repr__(self):
         return '<Role %r' % self.name
 
@@ -60,8 +62,12 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
+    name = db.Column(db.String(64))
+    location = db.Column(db.String(64))
+    about_me = db.Column(db.Text())
+    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
 
-    # ISSUE: Rollen zuweisung funktioniert beim registrieren nicht?!
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.role is None:
@@ -69,6 +75,11 @@ class User(UserMixin, db.Model):
                 self.role = Role.query.filter_by(permissions=0xff).first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
+
+    # refresh 'last_seen' timestamp
+    def ping(self):
+        self.last_seen = datetime.utcnow()
+        db.session.add(self)
 
     def can(self, permissions):
         return self.role is not None and (self.role.permissions & permissions) == permissions
