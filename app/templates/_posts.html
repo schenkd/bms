@@ -11,7 +11,12 @@
     <hr>
         <img class="img-responsive" src="http://placehold.it/900x300" alt="">
     <hr>
-        <p>{{ post.body }}</p>
+        <p>{% if post.body_html %}
+                {{ post.body_html | safe }}
+            {% else %}
+                {{ post.body }}
+            {% endif %}
+        </p>
         <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
     <hr>
