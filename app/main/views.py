@@ -3,16 +3,36 @@ from .. import db
 from flask import render_template, abort, flash, redirect, url_for, request
 from ..models import User, Permission, Post
 from flask_login import login_required, current_user, current_app
-from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
+from .forms import CKEditorForm, EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from ..decorators import admin_required, permission_required
 from ..models import Role, Comment
+
+
+@main.route('/writeArticle', methods=['GET', 'POST'])
+def write_article():
+    form = CKEditorForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data,
+                    body=form.body.data,
+                    author=current_user._get_current_object())
+        db.session.add(post)
+        return redirect(url_for('.index'))
+    return render_template('write_article.html', form=form)
+
+
+@main.route('/ckupload', methods=['POST', 'OPTIONS'])
+def ckupload():
+    form = CKEditorForm()
+    response = form.upload(endpoint=main)
+    return response
 
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
     form = PostForm()
     if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
-        post = Post(body=form.body.data,
+        post = Post(title=form.title.data,
+                    body=form.body.data,
                     author=current_user._get_current_object())
         db.session.add(post)
         return redirect(url_for('.index'))
@@ -110,6 +130,7 @@ def edit(id):
         db.session.add(post)
         flash('The post has been updated.')
         return redirect(url_for('.post', id=post.id))
+    form.title.data = post.title
     form.body.data = post.body
     return render_template('edit_post.html', form=form)
 

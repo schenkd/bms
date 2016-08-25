@@ -196,6 +196,7 @@ login_manager.anonymous_user = AnonymousUser
 class Post(db.Model):
     __tablename__ = 'posts'
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(64), default='new blog post')
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow())
@@ -206,7 +207,9 @@ class Post(db.Model):
     def on_changed_body(target, value, oldvalue, initiator):
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
                         'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
-                        'h1', 'h2', 'h3', 'p', 'br']
+                        'h1', 'h2', 'h3', 'p', 'br', 'sub', 'img', 'sup',
+                        'table', 'tbody', 'tr', 'td', 'hr', 'div', 'span', 'style',
+                        'src', 'alt', 'title', 's']
         target.body_html = bleach.linkify(bleach.clean(
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True))
@@ -221,7 +224,8 @@ class Post(db.Model):
         user_count = User.query.count()
         for i in range(count):
             u = User.query.offset(randint(0, user_count -1)).first()
-            p = Post(body=forgery_py.lorem_ipsum.sentences(randint(1, 3)),
+            p = Post(title=forgery_py.lorem_ipsum.sentences(randint(1, 3)),
+                     body=forgery_py.lorem_ipsum.sentences(randint(20, 30)),
                      timestamp=forgery_py.date.date(True),
                      author=u)
             db.session.add(p)
@@ -247,7 +251,7 @@ class Comment(db.Model):
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'code', 'em', 'i',
-                        'strong']
+                        'strong', 's', 'u']
         target.body_html = bleach.linkify(bleach.clean(
             markdown(value, output_format='html'),
             tags=allowed_tags, strip=True))

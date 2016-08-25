@@ -50,10 +50,13 @@
                     </li>
                     {% endif %}
                     <li>
-                        <a href="#">About Us</a>
+                        <a href="#">About us</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.can(Permission.WRITE_ARTICLES) %}
+                    <li><a href="{{ url_for('main.write_article') }}">Blog Post</a></li>
+                    {% endif %}
                     {% if current_user.can(Permission.MODERATE_COMMENTS) %}
                     <li><a href="{{ url_for('main.moderate') }}">Moderate Comments</a></li>
                     {% endif %}
@@ -116,6 +119,8 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='ckeditor/ckeditor.js') }}"></script>
 
     {% block scripts %}
         {{ moment.include_moment() }}

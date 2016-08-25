@@ -1,6 +1,7 @@
 {% for comment in comments %}
 <div class="panel panel-default">
   <div class="panel-body">
+      <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       {% if comment.disabled %}
         <p><i>This comment has been disabled by a moderator.</i></p>
       {% endif %}
@@ -15,14 +16,13 @@
   <div class="panel-footer">
       <div class="comment-date">{{ moment(comment.timestamp).fromNow() }}</div>
       <div class="comment-author">Autor: <a href="{{ url_for('.user', username=comment.author.username) }}">{{ comment.author.username }}</a></div>
-  </div>
-    {% if moderate %}
-      <br>
+      {% if moderate %}
         {% if comment.disabled %}
-            <a class="btn btn-default btn-xs" href="{{ url_for('.moderate_enable', id=comment.id, page=page) }}">Enable</a>
+            <a class="btn btn-default btn-xs pull-right" href="{{ url_for('.moderate_enable', id=comment.id, page=page) }}">Enable</a>
         {% else %}
-            <a class="btn btn-danger btn-xs" href="{{ url_for('.moderate_disable', id=comment.id, page=page) }}">Disable</a>
+            <a class="btn btn-danger btn-xs pull-right" href="{{ url_for('.moderate_disable', id=comment.id, page=page) }}">Disable</a>
         {% endif %}
       {% endif %}
+  </div>
 </div>
 {% endfor %}
