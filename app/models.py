@@ -229,4 +229,4 @@ class Post(db.Model):
                 db.session.rollback()
 
 # registred as a listener for SQLAlchemy's 'set' event
-db.event.listen(Post.body, 'set', Post.body_html)
+db.event.listen(Post.body, 'set', Post.on_changed_body)

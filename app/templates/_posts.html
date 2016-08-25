@@ -1,7 +1,7 @@
 {% for post in posts %}
     <!-- Blog Post -->
     <h2>
-        <a href="#">Blog Post Title</a>
+        <a href="{{ url_for('.post', id=post.id) }}">Blog Post Title</a>
     </h2>
     <p class="lead">
         by <a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a>
@@ -17,7 +17,11 @@
                 {{ post.body }}
             {% endif %}
         </p>
-        <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-
+        <a class="btn btn-primary" href="{{ url_for('.post', id=post.id) }}">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+        {% if current_user == post.author %}
+        <a class="btn btn-primary" href="{{ url_for('.edit', id=post.id) }}">Edit <span class="glyphicon glyphicon-edit"></span></a>
+        {% elif current_user.is_administrator %}
+        <a class="btn btn-danger" href="{{ url_for('.edit', id=post.id) }}">Edit [Admin] <span class="glyphicon glyphicon-edit"></span></a>
+        {% endif %}
     <hr>
 {% endfor %}
