@@ -23,5 +23,7 @@
         {% elif current_user.is_administrator %}
         <a class="btn btn-danger" href="{{ url_for('.edit', id=post.id) }}">Edit [Admin] <span class="glyphicon glyphicon-edit"></span></a>
         {% endif %}
+        <a class="btn btn-primary" href="{{ url_for('.post', id=post.id) }}#comments">{{ post.comments.count() }} Comments</a>
+</a>
     <hr>
 {% endfor %}
