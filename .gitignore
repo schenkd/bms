@@ -15,6 +15,15 @@ _book
 *.mobi
 *.pdf
 
+# Emacs backup files
+*~
+
+# Virtualenv
+.venv
+
+# Python bytecode files
+*.pyc
+
 # =========================
 # Operating System Files
 # =========================
